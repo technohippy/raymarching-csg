@@ -1,0 +1,638 @@
+{
+  "boundingbox": {
+    "max": {
+      "x": 200,
+      "y": 15,
+      "z": 225
+    },
+    "min": {
+      "x": -200,
+      "y": -15,
+      "z": -225
+    }
+  },
+  "id": "1545113429612091470",
+  "model": {
+    "arrangements": [
+      {
+        "elementIds": [
+          "/purge/child3",
+          "/purge/child4",
+          "/purge/child5",
+          "/purge/child6",
+          "/purge/child7",
+          "/purge/child8"
+        ],
+        "id": "arrangement-1",
+        "name": "Arrangement1",
+        "type": "step2hole"
+      },
+      {
+        "elementIds": [
+          "/purge/child9",
+          "/purge/child10",
+          "/purge/child11",
+          "/purge/child12"
+        ],
+        "id": "arrangement-2",
+        "name": "Arrangement2",
+        "type": "tappedhole"
+      },
+      {
+        "elementIds": [
+          "/purge/child13",
+          "/purge/child14"
+        ],
+        "id": "arrangement-3",
+        "name": "Arrangement3",
+        "type": "cylinder"
+      },
+      {
+        "elementIds": [
+          "/purge/child15",
+          "/purge/child16",
+          "/purge/child17",
+          "/purge/child18"
+        ],
+        "id": "arrangement-4",
+        "name": "Arrangement4",
+        "type": "tappedhole"
+      }
+    ],
+    "blueprints": [
+      {
+        "boundingbox": {
+          "max": {
+            "x": 518.348623853211,
+            "y": 609.6330275229357
+          },
+          "min": {
+            "x": 118.348623853211,
+            "y": 159.6330275229358
+          }
+        },
+        "normal": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        }
+      },
+      {
+        "boundingbox": {
+          "max": {
+            "x": 845.175812858681,
+            "y": 609.6330275229357
+          },
+          "min": {
+            "x": 815.175812858681,
+            "y": 159.6330275229356
+          }
+        },
+        "normal": {
+          "x": 1,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ],
+    "children": [
+      {
+        "id": "/purge/boundingbox",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "size": {
+          "x": {
+            "value": 400
+          },
+          "y": {
+            "value": 30
+          },
+          "z": {
+            "value": 450
+          }
+        },
+        "type": "box"
+      },
+      {
+        "height": {
+          "value": 25
+        },
+        "id": "/purge/child1",
+        "position": {
+          "x": -0,
+          "y": -2.5,
+          "z": -4.999999991817106e-07
+        },
+        "radius_bottom": {
+          "value": 16
+        },
+        "radius_top": {
+          "value": 16
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "taper_bottom": 1,
+        "type": "cylinder"
+      },
+      {
+        "height": {
+          "value": 4.999999000000001
+        },
+        "id": "/purge/child2",
+        "position": {
+          "x": -0,
+          "y": 12.499999500000001,
+          "z": -4.999999987376214e-07
+        },
+        "radius_bottom": {
+          "tolerance": {
+            "max": 0.025,
+            "min": 0.05
+          },
+          "value": 50
+        },
+        "radius_top": {
+          "tolerance": {
+            "max": 0.025,
+            "min": 0.05
+          },
+          "value": 50
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "type": "cylinder"
+      },
+      {
+        "desc": "counterborehole",
+        "id": "/purge/child3",
+        "kind": "step2hole",
+        "position": {
+          "x": -104,
+          "y": 15,
+          "z": 164.999999
+        },
+        "properties": [
+          {
+            "key": "step1_radius",
+            "value": 13
+          },
+          {
+            "key": "step1_depth",
+            "value": 18
+          },
+          {
+            "key": "step2_radius",
+            "value": 9
+          },
+          {
+            "key": "step2_depth",
+            "value": 12
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "counterborehole",
+        "id": "/purge/child4",
+        "kind": "step2hole",
+        "position": {
+          "x": -104,
+          "y": 15,
+          "z": -164.999999
+        },
+        "properties": [
+          {
+            "key": "step1_radius",
+            "value": 13
+          },
+          {
+            "key": "step1_depth",
+            "value": 18
+          },
+          {
+            "key": "step2_radius",
+            "value": 9
+          },
+          {
+            "key": "step2_depth",
+            "value": 12
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "counterborehole",
+        "id": "/purge/child5",
+        "kind": "step2hole",
+        "position": {
+          "x": 103.999999,
+          "y": 15,
+          "z": -164.999999
+        },
+        "properties": [
+          {
+            "key": "step1_radius",
+            "value": 13
+          },
+          {
+            "key": "step1_depth",
+            "value": 18
+          },
+          {
+            "key": "step2_radius",
+            "value": 9
+          },
+          {
+            "key": "step2_depth",
+            "value": 12
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "counterborehole",
+        "id": "/purge/child6",
+        "kind": "step2hole",
+        "position": {
+          "x": 103.999999,
+          "y": 15,
+          "z": 164.999999
+        },
+        "properties": [
+          {
+            "key": "step1_radius",
+            "value": 13
+          },
+          {
+            "key": "step1_depth",
+            "value": 18
+          },
+          {
+            "key": "step2_radius",
+            "value": 9
+          },
+          {
+            "key": "step2_depth",
+            "value": 12
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "counterborehole",
+        "id": "/purge/child7",
+        "kind": "step2hole",
+        "position": {
+          "x": -0,
+          "y": 15,
+          "z": -164.999999
+        },
+        "properties": [
+          {
+            "key": "step1_radius",
+            "value": 13
+          },
+          {
+            "key": "step1_depth",
+            "value": 18
+          },
+          {
+            "key": "step2_radius",
+            "value": 9
+          },
+          {
+            "key": "step2_depth",
+            "value": 12
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "counterborehole",
+        "id": "/purge/child8",
+        "kind": "step2hole",
+        "position": {
+          "x": 0,
+          "y": 15,
+          "z": 164.999999
+        },
+        "properties": [
+          {
+            "key": "step1_radius",
+            "value": 13
+          },
+          {
+            "key": "step1_depth",
+            "value": 18
+          },
+          {
+            "key": "step2_radius",
+            "value": 9
+          },
+          {
+            "key": "step2_depth",
+            "value": 12
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "tappedhole",
+        "id": "/purge/child9",
+        "kind": "tappedhole",
+        "position": {
+          "x": 30.052038,
+          "y": 10,
+          "z": -30.052038
+        },
+        "properties": [
+          {
+            "key": "thread_radius",
+            "value": 3
+          },
+          {
+            "key": "thread_depth",
+            "value": 15
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "tappedhole",
+        "id": "/purge/child10",
+        "kind": "tappedhole",
+        "position": {
+          "x": 30.052038,
+          "y": 10,
+          "z": 30.052038
+        },
+        "properties": [
+          {
+            "key": "thread_radius",
+            "value": 3
+          },
+          {
+            "key": "thread_depth",
+            "value": 15
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "tappedhole",
+        "id": "/purge/child11",
+        "kind": "tappedhole",
+        "position": {
+          "x": -30.052038,
+          "y": 10,
+          "z": 30.052038
+        },
+        "properties": [
+          {
+            "key": "thread_radius",
+            "value": 3
+          },
+          {
+            "key": "thread_depth",
+            "value": 15
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "desc": "tappedhole",
+        "id": "/purge/child12",
+        "kind": "tappedhole",
+        "position": {
+          "x": -30.052038,
+          "y": 10,
+          "z": -30.052038
+        },
+        "properties": [
+          {
+            "key": "thread_radius",
+            "value": 3
+          },
+          {
+            "key": "thread_depth",
+            "value": 15
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 180
+        },
+        "type": "component"
+      },
+      {
+        "height": {
+          "value": 12
+        },
+        "id": "/purge/child13",
+        "position": {
+          "x": 99.999999,
+          "y": -9,
+          "z": 0
+        },
+        "radius_bottom": {
+          "value": 3
+        },
+        "radius_top": {
+          "value": 3
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "type": "cylinder"
+      },
+      {
+        "height": {
+          "value": 12
+        },
+        "id": "/purge/child14",
+        "position": {
+          "x": -100,
+          "y": -9,
+          "z": 0
+        },
+        "radius_bottom": {
+          "value": 3
+        },
+        "radius_top": {
+          "value": 3
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "type": "cylinder"
+      },
+      {
+        "desc": "tappedhole",
+        "id": "/purge/child15",
+        "kind": "tappedhole",
+        "position": {
+          "x": -200,
+          "y": 0,
+          "z": 100
+        },
+        "properties": [
+          {
+            "key": "thread_radius",
+            "value": 10
+          },
+          {
+            "key": "thread_depth",
+            "value": 33
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": -90
+        },
+        "type": "component"
+      },
+      {
+        "desc": "tappedhole",
+        "id": "/purge/child16",
+        "kind": "tappedhole",
+        "position": {
+          "x": -200,
+          "y": 0,
+          "z": -99.999999
+        },
+        "properties": [
+          {
+            "key": "thread_radius",
+            "value": 10
+          },
+          {
+            "key": "thread_depth",
+            "value": 33
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": -90
+        },
+        "type": "component"
+      },
+      {
+        "desc": "tappedhole",
+        "id": "/purge/child17",
+        "kind": "tappedhole",
+        "position": {
+          "x": 199.999999,
+          "y": 0,
+          "z": -99.999999
+        },
+        "properties": [
+          {
+            "key": "thread_radius",
+            "value": 10
+          },
+          {
+            "key": "thread_depth",
+            "value": 33
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 90
+        },
+        "type": "component"
+      },
+      {
+        "desc": "tappedhole",
+        "id": "/purge/child18",
+        "kind": "tappedhole",
+        "position": {
+          "x": 199.999999,
+          "y": 0,
+          "z": 100
+        },
+        "properties": [
+          {
+            "key": "thread_radius",
+            "value": 10
+          },
+          {
+            "key": "thread_depth",
+            "value": 33
+          }
+        ],
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 90
+        },
+        "type": "component"
+      }
+    ],
+    "id": "/",
+    "type": "purge"
+  },
+  "plan": "BN178P3201_2d.json",
+  "timestamp": 1545113429612091400
+}
