@@ -3,10 +3,12 @@
 
 開発合宿の成果。nfmdc\_2d3dconverterで生成されるJSONファイルを3D表示する。
 
+![スクリーンショット](https://bitbucket.org/yasushiando/nfmdc_3dviewer/src/master/img/screenshot.png)
+
 実行
 ----
 
-    $ git clone git@bitbucket.org:kabuku/nfmdc-3dviewer.git
+    $ git clone git@bitbucket.org:yasushiando/nfmdc-3dviewer.git
     $ cd nfmdc-3dviewer
     $ python -m http.server 8000
     $ open http://localhost:8000
