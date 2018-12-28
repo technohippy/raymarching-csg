@@ -10,7 +10,7 @@ nfMDC 3D JSON Viewer
 実行
 ----
 
-    $ git clone git@bitbucket.org:yasushiando/nfmdc-3dviewer.git
+    $ git clone git@bitbucket.org:kabuku/nfmdc-3dviewer.git
     $ cd nfmdc-3dviewer
     $ python -m http.server 8000
     $ open http://localhost:8000
