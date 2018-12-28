@@ -1,4 +1,4 @@
-3D JSON 3D Viewer
+nfMDC 3D JSON Viewer
 ====
 
 開発合宿の成果。
