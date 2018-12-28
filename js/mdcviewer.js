@@ -195,7 +195,7 @@ function onModelChanged() {
       `));
   }
   else {
-    fetch(config.modelData).then(resp => resp.json()).then(json => {
+    fetch(`data/${config.modelData}`).then(resp => resp.json()).then(json => {
       model = json.model;
       fs = toFS(model);
       console.log(model);
