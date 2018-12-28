@@ -25,12 +25,12 @@ function init() {
   dolly = new THREE.Group();
   scene.add(dolly);
 
-  /*
   camera = new THREE.PerspectiveCamera(60, canvas.width / canvas.height, -1000, 3000);
-  camera.position.z = 4;
-  */
+  camera.position.z = 2;
+  /*
   camera = new THREE.OrthographicCamera(-100, 100, 100, -100, 0, 1000);
   camera.position.z = 10;
+  */
   dolly.add(camera);
 
   updateMesh(fshader);
@@ -78,6 +78,26 @@ function toVec3(xyz, scale=1) {
   return `vec3(${x*scale}, ${y*scale}, ${z*scale})`;
 }
 
+function transRotFS(target, move, scale) {
+  rot = move.rotation;
+  trans = move.position || move.trans;
+  return translateFS(rotateFS(target, rot), trans, scale)
+}
+
+function translateFS(target, trans, scale) {
+  if (trans && (trans.x != 0 || trans.y != 0 || trans.z != 0)) {
+    return `translate(${target}, ${toVec3(trans, scale)})`
+  }
+  return target;
+}
+
+function rotateFS(target, rotation) {
+  if (rotation && (rotation.x != 0 || rotation.y != 0 || rotation.z != 0)) {
+    return `rotate(${target}, ${toVec3(rotation)})`
+  }
+  return target;
+}
+
 function toFS(model, target="p") {
   const SCALE = 0.005;
   originalTarget = target;
@@ -92,27 +112,23 @@ function toFS(model, target="p") {
         m = `merge(${m}, ${cfs})`
       }
     });
-    //return `difference(${p}, ${m})`;
+    return `difference(${p}, ${m})`;
     //return `intersection(${p}, ${m})`;
-    return m;
+    //return m;
   }
   else {
-    if (model.rotation && (model.rotation.x != 0 || model.rotation.y != 0 || model.rotation.z != 0)) {
-      target = `rotate(${target}, ${toVec3(model.rotation)})`
-    }
-    if (model.position.x != 0 || model.position.y != 0 || model.position.z != 0) {
-      target = `translate(${target}, ${toVec3(model.position, SCALE)})`
-    }
-
     if (model.type === "box") {
       if (model.id === "/purge/boundingbox") { // TODO
+        target = transRotFS(target, model, SCALE)
         return `boxDist(${target}, ${toVec3(model.size, SCALE)})`
       }
       else {
+        target = transRotFS(target, model, SCALE)
         return `boxDist(${target}, ${toVec3(model.size, SCALE * 1.2)})`
       }
     }
     else if (model.type === "cylinder") {
+      target = transRotFS(target, model, SCALE)
       return `cylinderDist(${target}, ${model.radius_top.value * SCALE}, ${model.height.value * SCALE})`;
     }
     else if (model.type === "component") {
@@ -136,22 +152,21 @@ function toFS(model, target="p") {
             ${props["step2_depth"] * SCALE}))`;
       }
       else if (model.kind === "tappedhole") {
-        threadPos = {x:model.position.x, y:model.position.y, z:model.position.z};
-        threadPos.y -= props["thread_depth"] / 2;
-        drillPos = {x:model.position.x, y:model.position.y, z:model.position.z};
-        drillPos.y -= props["thread_depth"] * 1.2 / 2;
-
-        target1 = `translate(${originalTarget}, ${toVec3(threadPos, SCALE)})`
-        target2 = `translate(${originalTarget}, ${toVec3(drillPos, SCALE)})`
-
+        //target = transRotFS(originalTarget, model, SCALE)
+        target1 = originalTarget;
+        target2 = originalTarget;
+        target1 = `translate(${target1}, ${toVec3(model.position, SCALE)})`
+        target2 = `translate(${target2}, ${toVec3(model.position, SCALE)})`
         if (model.rotation && (model.rotation.x != 0 || model.rotation.y != 0 || model.rotation.z != 0)) {
-          /*
-          target1 = `rotate2(${target1}, ${toVec3(model.position)}, ${toVec3(model.rotation)})`
-          target2 = `rotate2(${target2}, ${toVec3(model.position)}, ${toVec3(model.rotation)})`
-          */
-          target1 = `rotate2(${target1}, vec3(0,0,0), ${toVec3(model.rotation)})`
-          target2 = `rotate2(${target2}, vec3(0,0,0), ${toVec3(model.rotation)})`
+          console.log(model.rotation);
+          if (model.rotation.z === 180) { // TODO: なぜ？
+            model.rotation.z = 0;
+          }
+          target1 = `rotate(${target1}, ${toVec3(model.rotation)})`
+          target2 = `rotate(${target2}, ${toVec3(model.rotation)})`
         }
+        target1 = `translate(${target1}, vec3(0.0, ${-props["thread_depth"] / 2 * SCALE}, 0.0))`
+        target2 = `translate(${target2}, vec3(0.0, ${-props["thread_depth"] * 1.2 / 2 * SCALE}, 0.0))`
 
         return `merge(
           cylinderDist(
@@ -169,13 +184,25 @@ function toFS(model, target="p") {
 }
 
 function onModelChanged() {
-  fetch(config.modelData).then(resp => resp.json()).then(json => {
-    model = json.model;
-    fs = toFS(model);
-    console.log(model);
+  if (config.modelData === "") {
+      updateMesh(getFShader(`
+        float c1 = cylinderDist(p, 0.4, 2.0);
+        float c2 = cylinderDist(rotate(p, vec3(0, 90, 0)), 0.4, 2.0);
+        float s2 = sphereDist(p, 0.3);
+        float b1 = boxDist(p, vec3(1., 1., 1.));
+        float b2 = boxDist(p, vec3(5.5, 0.5, 0.5));
+        return merge(difference(b1, merge(c1, c2)), s2);
+      `));
+  }
+  else {
+    fetch(config.modelData).then(resp => resp.json()).then(json => {
+      model = json.model;
+      fs = toFS(model);
+      console.log(model);
 
-    updateMesh(getFShader(`return ${fs};`));
-  })
+      updateMesh(getFShader(`return ${fs};`));
+    });
+  }
 }
 
 function onWindowResize() {
