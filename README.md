@@ -3,7 +3,7 @@
 
 開発合宿の成果。nfmdc\_2d3dconverterで生成されるJSONファイルを3D表示する。
 
-![スクリーンショット](https://bitbucket.org/yasushiando/nfmdc_3dviewer/raw/ff2892372c011cc661274af9b4c0b57eb2618a25/img/screenshot.png)
+![スクリーンショット](https://bitbucket.org/kabuku/nfmdc_3dviewer/raw/d0e889de6310b2b76a046b82d3cc7763f4e8051f/img/screenshot.png)
 
 実行
 ----
