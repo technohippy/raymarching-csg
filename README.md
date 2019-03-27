@@ -1,24 +1,20 @@
-nfMDC 3D JSON Viewer
+Raymarching CSG
 ====
 
-開発合宿の成果。
-
-レイマーチング＋CSGを使用して、nfmdc\_2d3dconverterで生成されるJSONファイルを3D表示する。
-
-![スクリーンショット](https://bitbucket.org/kabuku/nfmdc_3dviewer/raw/d0e889de6310b2b76a046b82d3cc7763f4e8051f/img/screenshot.png)
-
-実行
-----
-
-    $ git clone git@bitbucket.org:kabuku/nfmdc_3dviewer.git
-    $ cd nfmdc-3dviewer
-    $ python -m http.server 8000
-    $ open http://localhost:8000
+https://technohippy.github.io/raymarching-csg/
 
 TODO
 ----
 
 面取りやRの実現方法について要調査。特に面取り。
+
+実行
+----
+
+    $ git clone git@github.com/technohippy/raymarching-csg
+    $ cd raymarching-csg
+    $ python -m http.server 8000
+    $ open http://localhost:8000
 
 Ref.
 ----
