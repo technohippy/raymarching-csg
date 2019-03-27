@@ -3,11 +3,6 @@ Raymarching CSG
 
 https://technohippy.github.io/raymarching-csg/
 
-TODO
-----
-
-面取りやRの実現方法について要調査。特に面取り。
-
 実行
 ----
 

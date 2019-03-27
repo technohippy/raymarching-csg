@@ -23,29 +23,25 @@ const float OFFSET = EPS * 100.0;
 const vec3 light1Dir = normalize(vec3(0.5, 1, 0.8));
 const vec3 light2Dir = -light1Dir;
 
-float distance(vec3 p);
-
 // CSG
-// 交わり
-float intersection(float dist1, float dist2) {
+float intersect(float dist1, float dist2) {
   return max(dist1, dist2);
 }
 
-// 和（unionが予約語なので）
-float merge(float dist1, float dist2) {
+float unite(float dist1, float dist2) {
   return min(dist1, dist2);
 }
 
-// 差
-float difference(float dist1, float dist2) {
+float differ(float dist1, float dist2) {
   return max(dist1, -dist2);
 }
 
+// transform
 vec3 translate(vec3 p, vec3 v) {
   return p - v;
 }
 
-vec3 rotate2(vec3 p, vec3 c, vec3 deg) {
+vec3 rotateOnAxis(vec3 p, vec3 c, vec3 deg) {
   float x = radians(deg.x);
   float y = radians(deg.y);
   float z = radians(deg.z);
@@ -85,14 +81,7 @@ vec3 rotate(vec3 p, vec3 rad) {
   return m * p;
 }
 
-vec3 rotateDeg(vec3 p, vec3 deg) {
-  float x = radians(deg.x);
-  float y = radians(deg.y);
-  float z = radians(deg.z);
-  return rotate(p, vec3(x, y, z));
-}
-
-// distance functions
+// basic distance functions
 // http://iquilezles.org/www/articles/distfunctions/distfunctions.htm
 float sphereDist(vec3 p, float r) {
   return length(p) - r;
@@ -103,35 +92,28 @@ float boxDist(vec3 p, vec3 size) {
   return length(max(d,0.0)) + min(max(d.x,max(d.y,d.z)),0.0);
 }
 
-// 高さはY軸方向
 float cylinderDist(vec3 p, float radius, float height) {
   vec2 d = vec2( length(p.xz)-radius, abs(p.y) - height / 2.0);
   return min(max(d.x,d.y),0.0) + length(max(d,0.0));
 }
 
-vec4 minVec4(vec4 a, vec4 b) {
-  return (a.a < b.a) ? a : b;
-}
-
-float checkeredPattern(vec3 p) {
-  float u = 1.0 - floor(mod(p.x, 2.0));
-  float v = 1.0 - floor(mod(p.z, 2.0));
-
-  if ((u == 1.0 && v < 1.0) || (u < 1.0 && v == 1.0)) {
-    return 0.2;
-  } else {
-    return 1.0;
-  }
-}
-
-vec3 hsv2rgb(vec3 c) {
-  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+// distance function
+float distance(vec3 p) {
+  float cube = boxDist(rotate(translate(p, cubePosition), cubeRotation), vec3(cubeScale * 2., cubeScale * 2., cubeScale * 2.));
+  float cylinder = cylinderDist(rotate(translate(p, cylinderPosition), cylinderRotation), cylinderScale * 0.5, cylinderScale * 4.0);
+  float sphere = sphereDist(translate(p, spherePosition), sphereScale * 1.);
+  return differ(unite(cube, cylinder), sphere);
 }
 
 float sceneDist(vec3 p) {
   return distance(p);
+}
+
+// color
+vec3 hsv2rgb(vec3 c) {
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
 vec4 sceneColor(vec3 p) {
@@ -203,6 +185,7 @@ vec3 getRayColor(vec3 origin, vec3 ray, out vec3 pos, out vec3 normal, out bool 
 
 }
 
+// 
 void main(void) {
   // screen position
   vec2 screenPos = (gl_FragCoord.xy * 2.0 - resolution) / resolution;
@@ -232,11 +215,4 @@ void main(void) {
     if (!hit) break;
   }
   gl_FragColor = vec4(color, 1.0);
-}
-
-float distance(vec3 p) {
-  float cube = boxDist(rotate(translate(p, cubePosition), cubeRotation), vec3(cubeScale * 2., cubeScale * 2., cubeScale * 2.));
-  float cylinder = cylinderDist(rotate(translate(p, cylinderPosition), cylinderRotation), cylinderScale * 0.5, cylinderScale * 4.0);
-  float sphere = sphereDist(translate(p, spherePosition), sphereScale * 1.);
-  return merge(difference(cube, sphere), cylinder);
 }
