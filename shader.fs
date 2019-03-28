@@ -18,6 +18,8 @@ uniform vec3 cylinderPosition;
 uniform vec3 cylinderRotation;
 uniform float cylinderScale;
 
+uniform vec3 va[3];
+
 const float EPS = 0.001;
 const float OFFSET = EPS * 100.0;
 const vec3 light1Dir = normalize(vec3(0.5, 1, 0.8));
@@ -101,7 +103,7 @@ float cylinderDist(vec3 p, float radius, float height) {
 float distance(vec3 p) {
   float cube = boxDist(rotate(translate(p, cubePosition), cubeRotation), vec3(cubeScale * 2., cubeScale * 2., cubeScale * 2.));
   float cylinder = cylinderDist(rotate(translate(p, cylinderPosition), cylinderRotation), cylinderScale * 0.5, cylinderScale * 4.0);
-  float sphere = sphereDist(translate(p, spherePosition), sphereScale * 1.);
+  float sphere = sphereDist(translate(p, spherePosition), sphereScale * 1. * va[0][0]);
   return differ(unite(cube, cylinder), sphere);
 }
 
