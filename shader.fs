@@ -103,7 +103,8 @@ float cylinderDist(vec3 p, float radius, float height) {
 float distance(vec3 p) {
   float cube = boxDist(rotate(translate(p, cubePosition), cubeRotation), vec3(cubeScale * 2., cubeScale * 2., cubeScale * 2.));
   float cylinder = cylinderDist(rotate(translate(p, cylinderPosition), cylinderRotation), cylinderScale * 0.5, cylinderScale * 4.0);
-  float sphere = sphereDist(translate(p, spherePosition), sphereScale * 1. * va[0][0]);
+  //float sphere = sphereDist(translate(p, spherePosition), sphereScale * 1. * va[0][0]);
+  float sphere = sphereDist(translate(p, spherePosition), sphereScale * 1.);
   return differ(unite(cube, cylinder), sphere);
 }
 
@@ -153,34 +154,32 @@ vec3 getLightColor(vec3 lightDir, vec3 ray, vec3 pos, vec3 normal) {
   return (sceneColor(pos).rgb * diffuse + vec3(0.8) * specular) * max(0.5, shadow);
 }
 
-vec3 getRayColor(vec3 origin, vec3 ray, out vec3 pos, out vec3 normal, out bool hit) {
+vec3 getRayColor(vec3 rayOrigin, vec3 rayDirection, out vec3 rayPosition, out vec3 normal, out bool hit) {
   // marching loop
   float dist;
   float depth = 0.0;
-  pos = origin;
+  rayPosition = rayOrigin;
 
   for (int i = 0; i < 64; i++){
-    dist = sceneDist(pos);
-    depth += dist;
-    pos = origin + depth * ray;
+    dist = sceneDist(rayPosition);
+    if (abs(dist) < EPS) {
+      hit = true;
+      break;
+    }
 
-    if (abs(dist) < EPS) break;
+    depth += dist;
+    rayPosition = rayOrigin + depth * rayDirection;
   }
 
   // hit check and calc color
   vec3 color;
 
-  if (abs(dist) < EPS) {
-
-    normal = getNormal(pos);
-    color = getLightColor(light1Dir, ray, pos, normal) + getLightColor(light2Dir, ray, pos, normal);
-
-    hit = true;
-
+  if (hit) {
+    normal = getNormal(rayPosition);
+    color = getLightColor(light1Dir, rayDirection, rayPosition, normal) 
+      + getLightColor(light2Dir, rayDirection, rayPosition, normal);
   } else {
-
     color = vec3(0.0);
-
   }
 
   return color - pow(clamp(0.05 * depth, 0.0, 0.6), 2.0);
@@ -196,25 +195,28 @@ void main(void) {
   vec4 ndcRay = vec4(screenPos.xy, 1.0, 1.0);
 
   // convert ray direction from normalized device coordinate to world coordinate
-  vec3 ray = (cameraWorldMatrix * cameraProjectionMatrixInverse * ndcRay).xyz;
-  ray = normalize(ray);
+  vec3 rayDirection = (cameraWorldMatrix * cameraProjectionMatrixInverse * ndcRay).xyz;
+  rayDirection = normalize(rayDirection);
 
   // camera position
-  vec3 cPos = cameraPosition;
+  vec3 rayOrigin = cameraPosition;
 
   // cast ray
   vec3 color = vec3(0.0);
-  vec3 pos, normal;
+  vec3 nextRayPos, normal;
   bool hit;
   float alpha = 1.0;
 
   for (int i = 0; i < 3; i++) {
-    color += alpha * getRayColor(cPos, ray, pos, normal, hit);
-    alpha *= 0.3;
-    ray = normalize(reflect(ray, normal));
-    cPos = pos + normal * OFFSET;
+    color += alpha * getRayColor(rayOrigin, rayDirection, nextRayPos, normal, hit);
 
-    if (!hit) break;
+    if (!hit) {
+      break;
+    }
+
+    alpha *= 0.3;
+    rayDirection = normalize(reflect(rayDirection, normal));
+    rayOrigin = nextRayPos + normal * OFFSET;
   }
   gl_FragColor = vec4(color, 1.0);
 }

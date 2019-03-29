@@ -89,7 +89,7 @@ function initRaymarching() {
   let geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
   raymarchingMaterial = new THREE.RawShaderMaterial({
     uniforms: {
-      va: { value: [new THREE.Vector3(0.8, 0, 0), new THREE.Vector3(2, 0, 0), new THREE.Vector3(2, 0, 0)] },
+      //va: { value: [new THREE.Vector3(0.8, 0, 0), new THREE.Vector3(2, 0, 0), new THREE.Vector3(2, 0, 0)] },
       resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
       cameraWorldMatrix: { value: camera.matrixWorld },
       cameraProjectionMatrixInverse: { value: new THREE.Matrix4().getInverse(camera.projectionMatrix) },
