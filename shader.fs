@@ -171,17 +171,13 @@ vec3 getRayColor(vec3 rayOrigin, vec3 rayDirection, out vec3 rayPosition, out ve
     rayPosition = rayOrigin + depth * rayDirection;
   }
 
-  // hit check and calc color
-  vec3 color;
-
-  if (hit) {
-    normal = getNormal(rayPosition);
-    color = getLightColor(light1Dir, rayDirection, rayPosition, normal) 
-      + getLightColor(light2Dir, rayDirection, rayPosition, normal);
-  } else {
-    color = vec3(0.0);
+  if (!hit) {
+    return vec3(0.0);
   }
 
+  normal = getNormal(rayPosition);
+  vec3 color = getLightColor(light1Dir, rayDirection, rayPosition, normal) 
+    + getLightColor(light2Dir, rayDirection, rayPosition, normal);
   return color - pow(clamp(0.05 * depth, 0.0, 0.6), 2.0);
 
 }
