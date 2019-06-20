@@ -1,9 +1,15 @@
 let renderer, wireframeScene, camera, controls;
 let raymarchingScene, raymarchingMaterial, raymarchingScreen;
 let cube, cylinder, sphere;
+/*
+let composer;
+*/
 
 var config = {
   wireframe: false,
+  colored: false,
+  internalEdge: false,
+  outline: true,
   cubeScale: 1.0,
   cubePositionX: 0,
   cubePositionY: 0,
@@ -35,7 +41,11 @@ function init() {
 
   // GUI
   var gui = new dat.GUI();
-  gui.add(config, 'wireframe').name('Wireframe');
+  var viewFolder = gui.addFolder('View');
+  viewFolder.add(config, 'wireframe').name('Wireframe');
+  viewFolder.add(config, 'colored').name('Colored');
+  viewFolder.add(config, 'internalEdge').name('Internal Edge');
+  viewFolder.add(config, 'outline').name('Outline');
   var cubeFolder = gui.addFolder('Cube');
   cubeFolder.add(config, 'cubeScale', 0.5, 2);
   cubeFolder.add(config, 'cubePositionX', -2, 2);
@@ -93,6 +103,9 @@ function initRaymarching() {
       resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
       cameraWorldMatrix: { value: camera.matrixWorld },
       cameraProjectionMatrixInverse: { value: new THREE.Matrix4().getInverse(camera.projectionMatrix) },
+      colored: { value: false },
+      internalEdge: { value: true },
+      outline: { value: true },
       spherePosition: { value: new THREE.Vector3(0, 0, 0) },
       sphereRotation: { value: new THREE.Vector3(0, 0, 0) },
       sphereScale: { value: 1.0 },
@@ -126,6 +139,10 @@ function render() {
   cylinder.scale.set(config.cylinderScale, config.cylinderScale, config.cylinderScale);
   sphere.position.set(config.spherePositionX, config.spherePositionY, config.spherePositionZ);
   sphere.scale.set(config.sphereScale, config.sphereScale, config.sphereScale);
+
+  raymarchingMaterial.uniforms.colored.value = config.colored;
+  raymarchingMaterial.uniforms.internalEdge.value = config.internalEdge;
+  raymarchingMaterial.uniforms.outline.value = config.outline;
 
   raymarchingMaterial.uniforms.cubePosition.value = cube.position;
   raymarchingMaterial.uniforms.cubeRotation.value = cube.rotation;

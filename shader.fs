@@ -8,6 +8,10 @@ uniform vec3 cameraPosition;
 uniform mat4 cameraWorldMatrix;
 uniform mat4 cameraProjectionMatrixInverse;
 
+uniform bool colored;
+uniform bool internalEdge;
+uniform bool outline;
+
 uniform vec3 spherePosition;
 uniform vec3 sphereRotation;
 uniform float sphereScale;
@@ -20,6 +24,7 @@ uniform float cylinderScale;
 
 uniform vec3 va[3];
 
+const float PI = 3.1415926;
 const float EPS = 0.001;
 const float OFFSET = EPS * 100.0;
 const vec3 light1Dir = normalize(vec3(0.5, 1, 0.8));
@@ -154,7 +159,7 @@ vec3 getLightColor(vec3 lightDir, vec3 ray, vec3 pos, vec3 normal) {
   return (sceneColor(pos).rgb * diffuse + vec3(0.8) * specular) * max(0.5, shadow);
 }
 
-vec3 getRayColor(vec3 rayOrigin, vec3 rayDirection, out vec3 rayPosition, out vec3 normal, out bool hit) {
+float getDistance(vec3 rayOrigin, vec3 rayDirection, out vec3 rayPosition, out vec3 normal, out bool hit) {
   // marching loop
   float dist;
   float depth = 0.0;
@@ -170,16 +175,82 @@ vec3 getRayColor(vec3 rayOrigin, vec3 rayDirection, out vec3 rayPosition, out ve
     depth += dist;
     rayPosition = rayOrigin + depth * rayDirection;
   }
+  return depth;
+}
+
+bool isEdge(vec3 p) {
+  float eps = 7. * EPS;
+  float th = 0.99;
+
+  vec3 np = getNormal(p);
+
+  vec3 dns[6];
+  dns[0] = vec3(1.0, 0.0, 0.0);
+  dns[1] = vec3(0.0, 1.0, 0.0);
+  dns[2] = vec3(0.0, 0.0, 1.0);
+  dns[3] = vec3(-1.0, 0.0, 0.0);
+  dns[4] = vec3(0.0, -1.0, 0.0);
+  dns[5] = vec3(0.0, 0.0, -1.0);
+  for (int i=0; i < 6; i++) {
+    vec3 n = getNormal(p + eps * normalize(dns[i]));
+    if (dot(np, n) < th) {
+      return true;
+    }
+  }  
+  return false;
+}
+
+bool isOutline(vec3 rayOrigin, vec3 rayDirection) {
+  bool hit;
+  vec3 rayPosition, normal;
+  float eps = 15. * EPS;
+  float th = 0.2;
+
+  float dp = getDistance(rayOrigin, rayDirection, rayPosition, normal, hit);
+
+  vec3 dns[7];
+  dns[0] = vec3(1.0, 0.0, 0.0);
+  dns[1] = vec3(0.0, 1.0, 0.0);
+  dns[2] = vec3(0.0, 0.0, 1.0);
+  dns[3] = vec3(-1.0, 0.0, 0.0);
+  dns[4] = vec3(0.0, -1.0, 0.0);
+  dns[5] = vec3(0.0, 0.0, -1.0);
+  dns[6] = getNormal(rayOrigin);
+  for (int i=0; i < 7; i++) {
+    vec3 n = normalize(dns[i]);
+    float dn = getDistance(rayOrigin + eps * n, rayDirection, rayPosition, normal, hit);
+    if (!hit || th < abs(dp - dn)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+vec3 getRayColor(vec3 rayOrigin, vec3 rayDirection, out vec3 rayPosition, out vec3 normal, out bool hit) {
+  float depth = getDistance(rayOrigin, rayDirection, rayPosition, normal, hit);
 
   if (!hit) {
+    return vec3(1.);
+    //return vec3(0.3);
+  }
+
+  if (internalEdge && isEdge(rayPosition)) {
     return vec3(0.0);
   }
 
-  normal = getNormal(rayPosition);
-  vec3 color = getLightColor(light1Dir, rayDirection, rayPosition, normal) 
-    + getLightColor(light2Dir, rayDirection, rayPosition, normal);
-  return color - pow(clamp(0.05 * depth, 0.0, 0.6), 2.0);
+  if (outline && isOutline(rayPosition, rayDirection)) {
+    return vec3(0.0);
+  }
 
+  if (colored) {
+    normal = getNormal(rayPosition);
+    vec3 color = getLightColor(light1Dir, rayDirection, rayPosition, normal) 
+      + getLightColor(light2Dir, rayDirection, rayPosition, normal);
+    return color - pow(clamp(0.05 * depth, 0.0, 0.6), 2.0);
+  } else {
+    return vec3(1.); 
+  }
 }
 
 // 
